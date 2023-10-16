@@ -1,0 +1,91 @@
+== Simplifying NoSQL Database Integration with Jakarta NoSQL: A Hands-on Approach
+
+=== Check out the presentation: https://link.maxdearruda.com/eclipsecon2023[aqui,window=_blank]
+
+=== Prerequisites to execute this project
+
+* Java 17 or higher
+* https://www.docker.com/[Docker,window=_blank]
+* https://docs.docker.com/compose/install/[Docker Compose]
+
+=== Initialize MongoDB and Couchbase databases
+
+. Initializing the MongoDB container:
++
+[source,bash]
+----
+docker run -d --name mongodb-instance \
+-p 27017:27017 \
+-e MONGO_INITDB_ROOT_USERNAME=root \
+-e MONGO_INITDB_ROOT_PASSWORD=example mongo
+----
+. Initializing the Couchbase container:
++
+[source,bash]
+----
+docker run -d --name db \
+-p 8091-8097:8091-8097 \
+-p 9123:9123 \
+-p 11207:11207 \
+-p 11210:11210 \
+-p 11280:11280 \
+-p 18091-18097:18091-18097 couchbase
+----
+. Optionally, you can initialize containers with Docker Compose:
++
+[source,bash]
+----
+docker-compose up -d
+----
+. When you use Docker Compose, 3 containers will start up:
+    - mongo (you can connect on it by following the connection properties at docker-compose.yml file)
+    - mongo-express (use "admin:pass" to access it at: http://localhost:8081)
+    - couchbase (to access it, take a look at below).
+
+. The project uses https://maven.apache.org/wrapper/[Maven Wrapper,window=_blank], so it does not require you to have https://maven.apache.org/index.html[Maven,window= _blank] pre-configured in your environment, so just run the Maven command below to build the project:
+. .Linux/Mac:
++
+[source,bash]
+----
+./mvnw clean verify
+----
+
+. .Windows:
++
+[source,bash]
+----
+mvnw.cmd clean verify
+----
+
+. Now, if you have https://maven.apache.org/index.html[Maven,window=_blank] installed in your environment, then simply run the Maven command below to build the project:
++
+[source,bash]
+----
+mvn clean verify
+----
+
+=== Configuring the Couchbase cluster
+
+. With the Couchbase container started, go to: http://localhost:8091/ui/index.html
+. Select the "Setup New Cluster" option
+. Defines a name for the cluster name
+. Set "root" to `Admin username`
+. Set "123456" as `Password`
+. Check "I accept the terms and conditions" and click the "Finish With Defaults" button
+. Go to the "Buckets" section
+. Create a "nosqlsp" Bucket by clicking on the "Add Bucket" option
+. Click on "Scopes & Collections" and then click on "Add Collection"
+. Enter "JakartaDeveloper" as the name of the collection and click the "Save" button to complete its creation
+. Now, in the "Query" session, run this command https://www.couchbase.com/products/n1ql/[N1QL,window=_blank] to create the primary index of the "Developer" collection:
++
+[source,n1ql]
+----
+CREATE PRIMARY INDEX primaryDeveloper ON nosqlsp._default.JakartaDeveloper
+----
+
+=== Links and References
+
+* https://jakarta.ee/specifications/nosql/[Jakarta NoSQL,window=_blank]
+* https://jakarta.ee/specifications/data/[Jakarta Data,window=_blank]
+* https://microprofile.io/[Eclipse Microprofile,window=_blank]
+* https://jakarta.ee/[Jakarta EE,window=_blank]

@@ -1,0 +1,48 @@
+#
+#    Copyright 2023  Contributors to the Eclipse Foundation
+#
+#    All rights reserved. This program and the accompanying materials
+#    are made available under the terms of the Eclipse Public License v1.0
+#    and Apache License v2.0 which accompanies this distribution.
+#    The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v10.html
+#    and the Apache License v2.0 is available at http://www.opensource.org/licenses/apache2.0.php.
+#
+#    You may elect to redistribute this code under either of these licenses.
+#
+#    Contributors:
+#
+#    Maximillian Arruda
+#
+#
+version: '3'
+services:
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    ports:
+      - 27017:27017
+
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+
+
+#  couchbase-db:
+#    image: couchbase
+#    container_name: couchbase-db
+#    ports:
+#      - "8091-8097:8091-8097"
+#      - "9123:9123"
+#      - "11207:11207"
+#      - "11210:11210"
+#      - "11280:11280"
+#      - "18091-18097:18091-18097"
