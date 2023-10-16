@@ -27,11 +27,9 @@ import java.util.UUID;
 @Entity
 public record JakartaDeveloper(@Id String id, @Column String name, @Column String city, @Column String country,
                                @Column List<JakartaSpec> specs) {
-    @WithSpan
     public static JakartaDeveloper of(String name, String city, @Column String country, JakartaSpecsType... specs) {
         return new JakartaDeveloper(UUID.randomUUID().toString(), name, city, country, List.of(specs).stream().map(JakartaSpec::new).toList());
     }
-    @WithSpan
     public static JakartaDeveloper create(Faker faker){
         return JakartaDeveloper
                 .of(faker.name().fullName(),
